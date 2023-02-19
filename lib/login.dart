@@ -108,6 +108,52 @@ class _LoginPage extends State<LoginPage> with SingleTickerProviderStateMixin {
                             labelText: '비밀번호', border: OutlineInputBorder()),
                       ),
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pushNamed('/sign');
+                            },
+                            child: Text('회원가입')),
+                        TextButton(
+                            onPressed: () {
+                              if (_idTextController!.value.text.length == 0 ||
+                                  _pwTextController!.value.text.length == 0) {
+                                makeDialog('빈칸이 있습니다');
+                              } else {
+                                reference!
+                                    .child(_idTextController!.value.text)
+                                    .onValue
+                                    .listen((event) {
+                                  if (event.snapshot.value == null) {
+                                    makeDialog('아이디가 없습니다');
+                                  } else {
+                                    reference!
+                                        .child(_idTextController!.value.text)
+                                        .onChildAdded
+                                        .listen((event) {
+                                      User user =
+                                          User.fromSnapshot(event.snapshot);
+                                      var bytes = utf8.encode(
+                                          _pwTextController!.value.text);
+                                      var digest = sha1.convert(bytes);
+                                      if (user.pw == digest.toString()) {
+                                        Navigator.of(context)
+                                            .pushReplacementNamed('/main',
+                                                arguments: _idTextController!
+                                                    .value.text);
+                                      } else {
+                                        makeDialog('비밀번호가 틀립니다');
+                                      }
+                                    });
+                                  }
+                                });
+                              }
+                            },
+                            child: Text('로그인'))
+                      ],
+                    )
                   ],
                 ),
               )
@@ -120,12 +166,11 @@ class _LoginPage extends State<LoginPage> with SingleTickerProviderStateMixin {
 
   void makeDialog(String text) {
     showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          content: Text(text),
-        );
-      }
-    );
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Text(text),
+          );
+        });
   }
 }
