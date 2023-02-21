@@ -33,7 +33,7 @@ class _SignPage extends State<SignPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('회원가입'),
+        title: Text('회원가입'), //
       ),
     );
   }
