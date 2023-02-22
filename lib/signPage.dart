@@ -33,8 +33,28 @@ class _SignPage extends State<SignPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('회원가입'), //
+        title: Text('회원가입'),
       ),
+      body: Container(
+        child: Center(
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                width: 200,
+                child: TextField(
+                  controller: _idTextController,
+                  maxLines: 1,
+                  decoration: InputDecoration(
+                    hintText: '4자 이상 입력해주세요',
+                    labelText: '아이디',
+                    border: OutlineInputBorder()
+                  ),
+                ),
+              ),
+            ],
+          )
+        )
+      )
     );
   }
 }
