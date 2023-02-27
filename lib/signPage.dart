@@ -51,6 +51,39 @@ class _SignPage extends State<SignPage> {
                   ),
                 ),
               ),
+              SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                width: 200,
+                child: TextField(
+                  controller: _pwTextController,
+                  obscureText: true,
+                  maxLines: 1,
+                  decoration: InputDecoration(
+                    hintText: '6자 이상 입력해주세요',
+                    labelText: '비밀번호', border: OutlineInputBorder()
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                width: 200,
+                child: TextField(
+                  controller: _pwCheckController,
+                  obscureText: true,
+                  maxLines: 1,
+                  decoration: InputDecoration(
+                    labelText: '비밀번호확인',
+                    border: OutlineInputBorder()
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
             ],
           )
         )
