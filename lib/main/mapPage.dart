@@ -53,6 +53,11 @@ class _MapPage extends State<MapPage> {
     return Scaffold();
   }
 
-  void getAreaList({required int area, required int contentTypeId, required int page}) {
+  void getAreaList({required int area, required int contentTypeId, required int page}) async {
+      var url = '';
+      if (contentTypeId != 0) {
+        url = url + '&contentTypeId=$contentTypeId';
+      }
+      var response = await http.get(Uri.parse(url));
   }
 }
