@@ -40,8 +40,9 @@ class _MapPage extends State<MapPage> {
 
     _scrollController = new ScrollController();
     _scrollController!.addListener(() {
-      if (_scrollController!.offset >= _scrollController!.position.maxScrollExtent &&
-      !_scrollController!.position.outOfRange) {
+      if (_scrollController!.offset >=
+              _scrollController!.position.maxScrollExtent &&
+          !_scrollController!.position.outOfRange) {
         page++;
         getAreaList(area: area!.value, contentTypeId: kind!.value, page: page);
       }
@@ -53,11 +54,37 @@ class _MapPage extends State<MapPage> {
     return Scaffold();
   }
 
-  void getAreaList({required int area, required int contentTypeId, required int page}) async {
-      var url = '';
-      if (contentTypeId != 0) {
-        url = url + '&contentTypeId=$contentTypeId';
+  void getAreaList(
+      {required int area,
+      required int contentTypeId,
+      required int page}) async {
+    var url = '';
+    if (contentTypeId != 0) {
+      url = url + '&contentTypeId=$contentTypeId';
+    }
+    var response = await http.get(Uri.parse(url));
+    String body = utf8.decode(response.bodyBytes);
+    print(body);
+    var json = jsonDecode(body);
+    if (json['response']['header']['resultCode'] == "0000") {
+      if (json['response']['body']['items'] == '') {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                content: Text('Last data'),
+              );
+            });
+      } else {
+        List jsonArray = json['response']['body']['items']['item'];
+        for (var s in jsonArray) {
+          setState(() {
+            tourData.add(TourData.fromJson(s));
+          });
+        }
       }
-      var response = await http.get(Uri.parse(url));
+    } else {
+      print('error');
+    }
   }
 }
