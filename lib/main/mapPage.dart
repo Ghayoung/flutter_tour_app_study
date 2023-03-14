@@ -1,9 +1,14 @@
+/*
+관광 정보 표시 페이지
+ */
+
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:http/http.dart' as http;
 import 'package:tour_app_practice/data/tour.dart';
 import 'package:tour_app_practice/data/listData.dart';
+import 'package:tour_app_practice/main/tourDetailPage.dart';
 import 'package:sqflite/sqflite.dart';
 
 class MapPage extends StatefulWidget {
@@ -23,7 +28,7 @@ class _MapPage extends State<MapPage> {
   List<TourData> tourData = List.empty(growable: true);
   ScrollController? _scrollController;
 
-  String authKey = '';
+  String authKey = ''; //TODO
 
   Item? area;
   Item? kind;
@@ -51,7 +56,119 @@ class _MapPage extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('검색하기'),
+      ),
+      body: Container(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  DropdownButton<Item>(
+                    items: list,
+                    onChanged: (value) {
+                      Item selectedItem = value!;
+                      setState(() {
+                        kind = selectedItem;
+                      });
+                    },
+                    value: kind,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      page = 1;
+                      tourData.clear();
+                      getAreaList(
+                          area: area!.value,
+                          contentTypeId: kind!.value,
+                          page: page);
+                    },
+                    child: Text(
+                      '검색하기',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.blueAccent)),
+                  )
+                ],
+              ),
+              Expanded(
+                  child: ListView.builder(
+                itemBuilder: (context, index) {
+                  return Card(
+                    child: InkWell(
+                        child: Row(children: <Widget>[
+                          Hero(
+                              tag: 'tourinfo$index',
+                              child: Container(
+                                  margin: EdgeInsets.all(10),
+                                  width: 100.0,
+                                  height: 100.0,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                          color: Colors.black, width: 1),
+                                      image: DecorationImage(
+                                          fit: BoxFit.fill,
+                                          image: getImage(
+                                              tourData[index].imagePath))))),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width - 150,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Text(
+                                  tourData[index].title!,
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text('주소: ${tourData[index].address}'),
+                                tourData[index].tel != null
+                                    ? Text('전화 번호: ${tourData[index].tel}')
+                                    : Container(),
+                              ],
+                            ),
+                          )
+                        ]),
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => TourDetailPage(
+                                    id: widget.id,
+                                    tourData: tourData[index],
+                                    index: index,
+                                    databaseReference: widget.databaseReference,
+                                  )));
+                        }),
+                  );
+                },
+                itemCount: tourData.length,
+                controller: _scrollController,
+              ))
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  ImageProvider getImage(String? imagePath) {
+    if (imagePath != null) {
+      return NetworkImage(imagePath);
+    } else {
+      return AssetImage('repo/images/map_location.png');
+    }
   }
 
   void getAreaList(
