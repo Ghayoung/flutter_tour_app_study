@@ -67,8 +67,64 @@ class _TourDetailPage extends State<TourDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            expandedHeight: 150,
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text(
+                '${widget.tourData!.title}',
+                style: TextStyle(color: Colors.white, fontSize: 40),
+              ),
+              centerTitle: true,
+              titlePadding: EdgeInsets.only(top: 10),
+            ),
+            pinned: true,
+            backgroundColor: Colors.deepOrangeAccent,
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate([
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                child: Center(
+                  child: Column(
+                    children: <Widget>[
+                      Hero(
+                        tag: 'tourinfo${widget.index}',
+                        child: Container(
+                          width: 300.0,
+                          height: 300.0,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.black, width: 1),
+                            image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: getImage(widget.tourData!.imagePath),
+                            )
+                          )
+                        )
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 20, bottom: 20),
+                        child: Text(
+                          widget.tourData!.address!,
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ),
+                      getGoogleMap(),
+                      _disableWidget == false ? setDisableWidget() : showDisableWidget(),
+                    ],
+                  )
+                )
+              )
+            ])
+          )
+        ]
+      )
+    );
   }
 
   getDisableInfo() {
@@ -88,5 +144,25 @@ class _TourDetailPage extends State<TourDetailPage> {
         });
       }
     });
+  }
+
+  ImageProvider getImage(String? imagePath) {
+    if (imagePath != null) {
+      return NetworkImage(imagePath);
+    } else {
+      return AssetImage('repo/images/map_location.png');
+    }
+  }
+
+  Widget setDisableWidget() {
+    return Container();
+  }
+
+  getGoogleMap() {
+
+  }
+
+  showDisableWidget() {
+
   }
 }
