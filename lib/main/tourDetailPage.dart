@@ -68,63 +68,78 @@ class _TourDetailPage extends State<TourDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverAppBar(
-            expandedHeight: 150,
-            flexibleSpace: FlexibleSpaceBar(
-              title: Text(
-                '${widget.tourData!.title}',
-                style: TextStyle(color: Colors.white, fontSize: 40),
-              ),
-              centerTitle: true,
-              titlePadding: EdgeInsets.only(top: 10),
-            ),
-            pinned: true,
-            backgroundColor: Colors.deepOrangeAccent,
+        body: CustomScrollView(slivers: <Widget>[
+      SliverAppBar(
+        expandedHeight: 150,
+        flexibleSpace: FlexibleSpaceBar(
+          title: Text(
+            '${widget.tourData!.title}',
+            style: TextStyle(color: Colors.white, fontSize: 40),
           ),
-          SliverList(
-            delegate: SliverChildListDelegate([
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                child: Center(
-                  child: Column(
-                    children: <Widget>[
-                      Hero(
-                        tag: 'tourinfo${widget.index}',
-                        child: Container(
-                          width: 300.0,
-                          height: 300.0,
-                          decoration: BoxDecoration(
+          centerTitle: true,
+          titlePadding: EdgeInsets.only(top: 10),
+        ),
+        pinned: true,
+        backgroundColor: Colors.deepOrangeAccent,
+      ),
+      SliverList(
+          delegate: SliverChildListDelegate([
+        SizedBox(
+          height: 20,
+        ),
+        Container(
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                Hero(
+                    tag: 'tourinfo${widget.index}',
+                    child: Container(
+                        width: 300.0,
+                        height: 300.0,
+                        decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(color: Colors.black, width: 1),
                             image: DecorationImage(
                               fit: BoxFit.fill,
                               image: getImage(widget.tourData!.imagePath),
-                            )
-                          )
-                        )
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 20, bottom: 20),
-                        child: Text(
-                          widget.tourData!.address!,
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      ),
-                      getGoogleMap(),
-                      _disableWidget == false ? setDisableWidget() : showDisableWidget(),
-                    ],
-                  )
-                )
-              )
-            ])
-          )
-        ]
+                            )))),
+                Padding(
+                  padding: EdgeInsets.only(top: 20, bottom: 20),
+                  child: Text(
+                    widget.tourData!.address!,
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+                getGoogleMap(),
+                _disableWidget == false
+                    ? setDisableWidget()
+                    : showDisableWidget(),
+              ],
+            ),
+          ),
+        ),
+      ])),
+      SliverPersistentHeader(
+        delegate: _HeaderDelegate(
+            minHeight: 50,
+            maxHeight: 100,
+            child: Container(
+              color: Colors.lightBlueAccent,
+              child: Center(
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      '후기',
+                      style: TextStyle(fontSize: 30, color: Colors.white),
+                    ),
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.center,
+                ),
+              ),
+            )),
+        pinned: true,
       )
-    );
+    ]));
   }
 
   getDisableInfo() {
@@ -158,11 +173,40 @@ class _TourDetailPage extends State<TourDetailPage> {
     return Container();
   }
 
-  getGoogleMap() {
+  getGoogleMap() {}
 
+  showDisableWidget() {}
+}
+
+class _HeaderDelegate extends SliverPersistentHeaderDelegate {
+  final double? minHeight;
+  final double? maxHeight;
+  final Widget? child;
+
+  _HeaderDelegate({
+    @required this.minHeight,
+    @required this.maxHeight,
+    @required this.child,
+  });
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    // TODO: implement build
+    throw UnimplementedError();
   }
 
-  showDisableWidget() {
+  @override
+  // TODO: implement maxExtent
+  double get maxExtent => throw UnimplementedError();
 
+  @override
+  // TODO: implement minExtent
+  double get minExtent => throw UnimplementedError();
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    // TODO: implement shouldRebuild
+    throw UnimplementedError();
   }
 }
