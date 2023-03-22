@@ -138,7 +138,34 @@ class _TourDetailPage extends State<TourDetailPage> {
               ),
             )),
         pinned: true,
-      )
+      ),
+      SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+        return Card(
+          child: InkWell(
+            child: Padding(
+              padding: EdgeInsets.only(top: 10, bottom: 10, left: 10),
+              child: Text(
+                '${reviews[index].id} : ${reviews[index].review}',
+                style: TextStyle(fontSize: 15),
+              ),
+            ),
+            onDoubleTap: () {
+              if (reviews[index].id == widget.id) {
+                widget.databaseReference!
+                    .child('tour')
+                    .child(widget.tourData!.id.toString())
+                    .child('review')
+                    .child(widget.id!)
+                    .remove();
+                setState(() {
+                  reviews.removeAt(index);
+                });
+              }
+            },
+          ),
+        );
+      }, childCount: reviews.length)),
     ]));
   }
 
