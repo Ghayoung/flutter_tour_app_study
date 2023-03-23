@@ -166,6 +166,46 @@ class _TourDetailPage extends State<TourDetailPage> {
           ),
         );
       }, childCount: reviews.length)),
+      SliverList(
+        delegate: SliverChildListDelegate([
+          ElevatedButton(
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text('후기 쓰기'),
+                      content: TextField(
+                        controller: _reviewTextController,
+                      ),
+                      actions: <Widget>[
+                        TextButton(
+                            onPressed: () {
+                              Review review = Review(
+                                  widget.id!,
+                                  _reviewTextController!.value.text,
+                                  DateTime.now().toIso8601String());
+                              widget.databaseReference!
+                                  .child('tour')
+                                  .child(widget.tourData!.id.toString())
+                                  .child('review')
+                                  .child(widget.id!)
+                                  .set(review.toJson());
+                            },
+                            child: Text('후기 쓰기')),
+                        TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('종료하기')),
+                      ],
+                    );
+                  });
+            },
+            child: Text('댓글 쓰기'),
+          )
+        ]),
+      )
     ]));
   }
 
