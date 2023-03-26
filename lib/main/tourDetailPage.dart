@@ -237,7 +237,29 @@ class _TourDetailPage extends State<TourDetailPage> {
   }
 
   Widget setDisableWidget() {
-    return Container();
+    return Container(
+      child: Center(
+        child: Column(
+          children: <Widget>[
+            Text('데이터가 없습니다. 추가해주세요'),
+            Text('시각 장애인 이용 점수: ${disableCheck1.floor()}'),
+            Padding(
+              padding: EdgeInsets.all(20),
+              child: Slider(
+                value: disableCheck1,
+                min: 0,
+                max: 10,
+                onChanged: (value) {
+                  setState(() {
+                    disableCheck1 = value;
+                  });
+                }
+              ),
+            )
+          ]
+        )
+      )
+    );
   }
 
   getGoogleMap() {}
