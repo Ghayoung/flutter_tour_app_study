@@ -238,28 +238,51 @@ class _TourDetailPage extends State<TourDetailPage> {
 
   Widget setDisableWidget() {
     return Container(
-      child: Center(
-        child: Column(
-          children: <Widget>[
-            Text('데이터가 없습니다. 추가해주세요'),
-            Text('시각 장애인 이용 점수: ${disableCheck1.floor()}'),
-            Padding(
-              padding: EdgeInsets.all(20),
-              child: Slider(
-                value: disableCheck1,
-                min: 0,
-                max: 10,
-                onChanged: (value) {
-                  setState(() {
-                    disableCheck1 = value;
-                  });
-                }
-              ),
-            )
-          ]
-        )
+        child: Center(
+            child: Column(children: <Widget>[
+      Text('데이터가 없습니다. 추가해주세요'),
+      Text('시각 장애인 이용 점수: ${disableCheck1.floor()}'),
+      Padding(
+        padding: EdgeInsets.all(20),
+        child: Slider(
+            value: disableCheck1,
+            min: 0,
+            max: 10,
+            onChanged: (value) {
+              setState(() {
+                disableCheck1 = value;
+              });
+            }),
+      ),
+      Text('지체 장애인 이용 점수: ${disableCheck2.floor()}'),
+      Padding(
+          padding: EdgeInsets.all(20),
+          child: Slider(
+              value: disableCheck2,
+              min: 0,
+              max: 10,
+              onChanged: (value) {
+                setState(() {
+                  disableCheck2 = value;
+                });
+              })),
+      ElevatedButton(
+        onPressed: () {
+          DisableInfo info = DisableInfo(widget.id, disableCheck1.floor(),
+              disableCheck2.floor(), DateTime.now().toIso8601String());
+          widget.databaseReference!
+              .child('tour')
+              .child(widget.tourData!.id.toString())
+              .set(info.toJson())
+              .then((value) {
+            setState(() {
+              _disableWidget = true;
+            });
+          });
+        },
+        child: Text('데이터 저장하기'),
       )
-    );
+    ])));
   }
 
   getGoogleMap() {}
