@@ -285,7 +285,20 @@ class _TourDetailPage extends State<TourDetailPage> {
     ])));
   }
 
-  getGoogleMap() {}
+  getGoogleMap() {
+    return SizedBox(
+      height: 400,
+      width: MediaQuery.of(context).size.width - 50,
+      child: GoogleMap(
+        mapType: MapType.normal,
+        initialCameraPosition: _googleMapCamera!,
+        onMapCreated: (GoogleMapController controller) {
+          _controller.complete(controller);
+        },
+        markers: Set<Marker>.of(markers.values),
+      ),
+    );
+  }
 
   showDisableWidget() {}
 }
