@@ -300,7 +300,24 @@ class _TourDetailPage extends State<TourDetailPage> {
     );
   }
 
-  showDisableWidget() {}
+  showDisableWidget() {
+    return Center(
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Icon(Icons.accessible, size: 40, color: Colors.orange),
+              Text(
+                '지체 장애 이용 점수 : ${_disableInfo!.disable2}',
+                style: TextStyle(fontSize: 20),
+              )
+            ],
+          ),
+        ]
+      )
+    );
+  }
 }
 
 class _HeaderDelegate extends SliverPersistentHeaderDelegate {
