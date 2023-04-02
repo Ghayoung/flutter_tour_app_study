@@ -302,33 +302,51 @@ class _TourDetailPage extends State<TourDetailPage> {
 
   showDisableWidget() {
     return Center(
-        child: Column(children: <Widget>[
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      child: Column(
         children: <Widget>[
-          Icon(Icons.accessible, size: 40, color: Colors.orange),
-          Text(
-            '지체 장애 이용 점수 : ${_disableInfo!.disable2}',
-            style: TextStyle(fontSize: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Icon(Icons.accessible, size: 40, color: Colors.orange),
+              Text(
+                '지체 장애 이용 점수 : ${_disableInfo!.disable2}',
+                style: TextStyle(fontSize: 20),
+              )
+            ],
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Icon(
+                Icons.remove_red_eye,
+                size: 40,
+                color: Colors.orange,
+              ),
+              Text('시각 장애 이용 점수 : ${_disableInfo!.disable1}',
+                  style: TextStyle(fontSize: 20))
+            ],
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Text('작성자 : ${_disableInfo!.id}'),
+          SizedBox(
+            height: 20,
+          ),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                _disableWidget = false;
+              });
+            },
+            child: Text('새로 작성하기'),
           )
         ],
       ),
-      SizedBox(
-        height: 20,
-      ),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Icon(
-            Icons.remove_red_eye,
-            size: 40,
-            color: Colors.orange,
-          ),
-          Text('시각 장애 이용 점수 : ${_disableInfo!.disable1}',
-              style: TextStyle(fontSize: 20))
-        ],
-      )
-    ]));
+    );
   }
 }
 
