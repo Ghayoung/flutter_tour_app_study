@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'login.dart';
 import 'signPage.dart';
 import 'mainPage.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,8 +13,22 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  Future<Database> initDatabase() async {
+    return openDatabase(
+      join(await getDatabasesPath(), 'tour_database.db'),
+      onCreate: (db, version) {
+        return db.execute(
+          "CREATE TABLE place(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, tel TEXT, zipcode TEXT, address TEXT, mapx Number, mapy Number, imagePath TEXT)",
+        );
+      },
+      version: 1,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    Future<Database> database = initDatabase();
+
     return MaterialApp(
       title: '모두의 여행',
       theme: ThemeData(
