@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import 'main/favoritePage.dart';
 import 'main/settingPage.dart';
 import 'main/mapPage.dart';
+import 'package:sqflite/sqflite.dart';
 
 class MainPage extends StatefulWidget {
+  final Future<Database> database;
+  MainPage(this.database);
+
   @override
   State<StatefulWidget> createState() => _MainPage();
 }
@@ -37,8 +41,16 @@ class _MainPage extends State<MainPage> with SingleTickerProviderStateMixin {
       body: TabBarView(
         controller: controller,
         children: <Widget>[
-          MapPage(), // 관광 정보 표시
-          FavoritePage(), // 즐겨찾기 페이지
+          MapPage(
+            databaseReference: reference,
+            db: widget.database,
+            id: id,
+          ), // 관광 정보 표시
+          FavoritePage(
+            databaseReference: reference,
+            db: widget.database,
+            id: id,
+          ), // 즐겨찾기 페이지
           SettingPage() // 설정 페이지
         ],
       ),
