@@ -105,52 +105,55 @@ class _MapPage extends State<MapPage> {
                 itemBuilder: (context, index) {
                   return Card(
                     child: InkWell(
-                        child: Row(children: <Widget>[
-                          Hero(
-                              tag: 'tourinfo$index',
-                              child: Container(
-                                  margin: EdgeInsets.all(10),
-                                  width: 100.0,
-                                  height: 100.0,
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                          color: Colors.black, width: 1),
-                                      image: DecorationImage(
-                                          fit: BoxFit.fill,
-                                          image: getImage(
-                                              tourData[index].imagePath))))),
-                          SizedBox(
-                            width: 20,
+                      child: Row(children: <Widget>[
+                        Hero(
+                            tag: 'tourinfo$index',
+                            child: Container(
+                                margin: EdgeInsets.all(10),
+                                width: 100.0,
+                                height: 100.0,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        color: Colors.black, width: 1),
+                                    image: DecorationImage(
+                                        fit: BoxFit.fill,
+                                        image: getImage(
+                                            tourData[index].imagePath))))),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width - 150,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              Text(
+                                tourData[index].title!,
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                              Text('주소: ${tourData[index].address}'),
+                              tourData[index].tel != null
+                                  ? Text('전화 번호: ${tourData[index].tel}')
+                                  : Container(),
+                            ],
                           ),
-                          Container(
-                            width: MediaQuery.of(context).size.width - 150,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                Text(
-                                  tourData[index].title!,
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text('주소: ${tourData[index].address}'),
-                                tourData[index].tel != null
-                                    ? Text('전화 번호: ${tourData[index].tel}')
-                                    : Container(),
-                              ],
-                            ),
-                          )
-                        ]),
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => TourDetailPage(
-                                    id: widget.id,
-                                    tourData: tourData[index],
-                                    index: index,
-                                    databaseReference: widget.databaseReference,
-                                  )));
-                        }),
+                        )
+                      ]),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => TourDetailPage(
+                                  id: widget.id,
+                                  tourData: tourData[index],
+                                  index: index,
+                                  databaseReference: widget.databaseReference,
+                                )));
+                      },
+                      onDoubleTap: () {
+                        insertTour(widget.db!, tourData[index]);
+                      },
+                    ),
                   );
                 },
                 itemCount: tourData.length,
@@ -203,5 +206,16 @@ class _MapPage extends State<MapPage> {
     } else {
       print('error');
     }
+  }
+
+  void insertTour(Future<Database> db, TourData info) async {
+    final Database database = await db;
+    await database
+        .insert('place', info.toMap(),
+            conflictAlgorithm: ConflictAlgorithm.replace)
+        .then((value) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('즐겨찾기에 추가되었습니다')));
+    });
   }
 }
