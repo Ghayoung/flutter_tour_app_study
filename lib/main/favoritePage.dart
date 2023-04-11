@@ -27,7 +27,37 @@ class _FavoritePage extends State<FavoritePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('즐겨찾기'),
+      ),
+      body: Container(
+        child: Center(
+          child: FutureBuilder(
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                  return CircularProgressIndicator();
+                case ConnectionState.waiting:
+                  return CircularProgressIndicator();
+                case ConnectionState.active:
+                  return CircularProgressIndicator();
+                case ConnectionState.done:
+                  if (snapshot.hasData) {
+                    return ListView.builder(itemBuilder: (context, index) {
+                      return Card();
+                    });
+                  } else {
+                    return Text('No data');
+                  }
+              }
+              return CircularProgressIndicator();
+            },
+            future: _tourList,
+          ),
+        ),
+      ),
+    );
   }
 
   Future<List<TourData>> getTodos() async {
