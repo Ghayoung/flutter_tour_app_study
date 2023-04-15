@@ -45,6 +45,8 @@ class _FavoritePage extends State<FavoritePage> {
                 case ConnectionState.done:
                   if (snapshot.hasData) {
                     return ListView.builder(itemBuilder: (context, index) {
+                      List<TourData> tourList = snapshot.data as List<TourData>;
+                      TourData info = tourList[index];
                       return Card();
                     });
                   } else {
