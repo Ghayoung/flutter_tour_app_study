@@ -47,7 +47,32 @@ class _FavoritePage extends State<FavoritePage> {
                     return ListView.builder(itemBuilder: (context, index) {
                       List<TourData> tourList = snapshot.data as List<TourData>;
                       TourData info = tourList[index];
-                      return Card();
+                      return Card(
+                        child: InkWell(
+                          child: Row(
+                            children: <Widget>[
+                              Hero(
+                                tag: 'tourinfo$index',
+                                child: Container(
+                                  margin: EdgeInsets.all(10),
+                                  width: 100.0,
+                                  height: 100.0,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: Colors.black, width: 1
+                                    ),
+                                    image: DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: getImage(info.imagePath!)
+                                    )
+                                  )
+                                )
+                              )
+                            ]
+                          )
+                        )
+                      );
                     });
                   } else {
                     return Text('No data');
@@ -60,6 +85,14 @@ class _FavoritePage extends State<FavoritePage> {
         ),
       ),
     );
+  }
+
+  ImageProvider getImage(String imagePath) {
+    if (imagePath != 'null') {
+      return NetworkImage(imagePath);
+    } else {
+      return AssetImage('repo/images/map_location.png');
+    }
   }
 
   Future<List<TourData>> getTodos() async {
