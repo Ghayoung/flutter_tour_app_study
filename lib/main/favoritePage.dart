@@ -75,6 +75,7 @@ class _FavoritePage extends State<FavoritePage> {
                               Container(
                                 width: MediaQuery.of(context).size.width - 150,
                                 child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
                                     Text(
                                       info.title!,
@@ -86,7 +87,6 @@ class _FavoritePage extends State<FavoritePage> {
                                     Text('주소 : ${info.address}'),
                                     info.tel != 'null' ? Text('전화 번호 : ${info.tel}') : Container(),
                                   ],
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 ),
                               )
                             ],
