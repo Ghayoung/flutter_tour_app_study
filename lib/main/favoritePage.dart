@@ -68,9 +68,29 @@ class _FavoritePage extends State<FavoritePage> {
                                     )
                                   )
                                 )
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width - 150,
+                                child: Column(
+                                  children: <Widget>[
+                                    Text(
+                                      info.title!,
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold
+                                      ),
+                                    ),
+                                    Text('주소 : ${info.address}'),
+                                    info.tel != 'null' ? Text('전화 번호 : ${info.tel}') : Container(),
+                                  ],
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                ),
                               )
-                            ]
-                          )
+                            ],
+                          ),
                         )
                       );
                     });
