@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:tour_app_practice/data/tour.dart';
+import 'package:tour_app_practice/main/tourDetailPage.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class FavoritePage extends StatefulWidget {
@@ -44,56 +45,72 @@ class _FavoritePage extends State<FavoritePage> {
                   return CircularProgressIndicator();
                 case ConnectionState.done:
                   if (snapshot.hasData) {
-                    return ListView.builder(itemBuilder: (context, index) {
-                      List<TourData> tourList = snapshot.data as List<TourData>;
-                      TourData info = tourList[index];
-                      return Card(
-                        child: InkWell(
-                          child: Row(
-                            children: <Widget>[
-                              Hero(
-                                tag: 'tourinfo$index',
-                                child: Container(
-                                  margin: EdgeInsets.all(10),
-                                  width: 100.0,
-                                  height: 100.0,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: Colors.black, width: 1
-                                    ),
-                                    image: DecorationImage(
-                                      fit: BoxFit.fill,
-                                      image: getImage(info.imagePath!)
-                                    )
-                                  )
-                                )
-                              ),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              Container(
-                                width: MediaQuery.of(context).size.width - 150,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: <Widget>[
-                                    Text(
-                                      info.title!,
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold
-                                      ),
-                                    ),
-                                    Text('주소 : ${info.address}'),
-                                    info.tel != 'null' ? Text('전화 번호 : ${info.tel}') : Container(),
-                                  ],
+                    return ListView.builder(
+                      itemBuilder: (context, index) {
+                        List<TourData> tourList =
+                            snapshot.data as List<TourData>;
+                        TourData info = tourList[index];
+                        return Card(
+                          child: InkWell(
+                            child: Row(
+                              children: <Widget>[
+                                Hero(
+                                    tag: 'tourinfo$index',
+                                    child: Container(
+                                        margin: EdgeInsets.all(10),
+                                        width: 100.0,
+                                        height: 100.0,
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            border: Border.all(
+                                                color: Colors.black, width: 1),
+                                            image: DecorationImage(
+                                                fit: BoxFit.fill,
+                                                image: getImage(
+                                                    info.imagePath!))))),
+                                SizedBox(
+                                  width: 20,
                                 ),
-                              )
-                            ],
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width - 150,
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: <Widget>[
+                                      Text(
+                                        info.title!,
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text('주소 : ${info.address}'),
+                                      info.tel != 'null'
+                                          ? Text('전화 번호 : ${info.tel}')
+                                          : Container(),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => TourDetailPage(
+                                        id: widget.id,
+                                        tourData: info,
+                                        index: index,
+                                        databaseReference:
+                                            widget.databaseReference,
+                                      )));
+                            },
+                            onDoubleTap: () {
+                              deleteTour(widget.db!, info);
+                            },
                           ),
-                        )
-                      );
-                    });
+                        );
+                      },
+                      itemCount: (snapshot.data! as List<TourData>).length,
+                    );
                   } else {
                     return Text('No data');
                   }
@@ -114,6 +131,8 @@ class _FavoritePage extends State<FavoritePage> {
       return AssetImage('repo/images/map_location.png');
     }
   }
+
+  void deleteTour(Future<Database> db, TourData info) async {}
 
   Future<List<TourData>> getTodos() async {
     final Database database = await widget.db!;
