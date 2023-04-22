@@ -132,7 +132,17 @@ class _FavoritePage extends State<FavoritePage> {
     }
   }
 
-  void deleteTour(Future<Database> db, TourData info) async {}
+  void deleteTour(Future<Database> db, TourData info) async {
+    final Database database = await db;
+    await database.delete('place',
+        where: 'title=?', whereArgs: [info.title]).then((value) {
+      setState(() {
+        _tourList = getTodos();
+      });
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('즐겨찾기를 해제합니다')));
+    });
+  }
 
   Future<List<TourData>> getTodos() async {
     final Database database = await widget.db!;
