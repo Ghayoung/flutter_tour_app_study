@@ -25,7 +25,17 @@ class _SettingPage extends State<SettingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('설정하기'),
+      ),
+    );
+  }
+
+  void _setData(bool value) async {
+    var key = "push";
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setBool(key, value);
   }
 
   void _loadData() async {
