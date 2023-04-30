@@ -29,6 +29,22 @@ class _SettingPage extends State<SettingPage> {
       appBar: AppBar(
         title: Text('설정하기'),
       ),
+      body: Container(
+        child: Center(
+          child: Column(
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Text(
+                    '푸시 알림',
+                    style: TextStyle(fontSize: 20),
+                  )
+                ]
+              )
+            ]
+          )
+        )
+      )
     );
   }
 
